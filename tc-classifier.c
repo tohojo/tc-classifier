@@ -41,30 +41,20 @@ int tc_main(struct __sk_buff *skb)
 	head = (void *)(unsigned long)skb->data;
 	tail = (void *)(unsigned long)skb->data_end;
 
-	if (head + sizeof(*eth) > tail) {
-		class = 2;
+	if (head + sizeof(*eth) > tail)
 		goto out;
-	}
 
 	eth = (void *)head;
 	head += sizeof(*eth);
 
-	if (__be16_to_cpu(eth->h_proto) != ETH_P_IP) {
-		class = 3;
+	if (__be16_to_cpu(eth->h_proto) != ETH_P_IP ||
+	    head + sizeof(*ip) > tail)
 		goto out;
-	}
-
-	if (head + sizeof(*ip) > tail) {
-		class = 4;
-		goto out;
-	}
 
 	ip = (void *)head;
 
-	if (head + ip->ihl * 4 > tail) {
-		class = 5;
+	if (head + ip->ihl * 4 > tail)
 		goto out;
-	}
 
 	dest_ip = ip->daddr;
 

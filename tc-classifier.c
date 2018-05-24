@@ -6,7 +6,21 @@
 #include <linux/pkt_cls.h>
 #include <linux/types.h>
 #include <iproute2/bpf_elf.h>
-#include "tc-classifier.h"
+#include <sys/types.h>
+#include <stdint.h>
+
+typedef uint8_t  u8;			/* Unsigned types of an exact size */
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
+#define SEC(NAME) __attribute__((section(NAME), used))
+
+#ifndef BPF_FUNC
+# define BPF_FUNC(NAME, ...)              \
+   (*NAME)(__VA_ARGS__) = (void *)BPF_FUNC_##NAME
+#endif
+
+static void *BPF_FUNC(map_lookup_elem, void *map, const void *key);
 
 #define ETH_LEN 14
 #define MIN_MASK 20

@@ -1,0 +1,6 @@
+# Format: subnet class
+# Class must be > 0 and < 1024; each gets its own queue
+# LPM is performed, so subnets can overlap
+10.43.43.0/24 12
+10.43.42.0/24 13
+
